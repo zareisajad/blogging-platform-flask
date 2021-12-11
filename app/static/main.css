@@ -1,0 +1,78 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway:200,100,400");
+
+body {
+  background: #ccc;
+  font-family: "Raleway", sans-serif;
+}
+
+.dropdown:first-child {
+  margin-left: -7.8px;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #f4f4f4;
+  margin: 10% auto;
+  width: 40%;
+  box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.17);
+  animation-name: modalopen;
+  animation-duration: 1s;
+}
+
+.modal-header {
+  background: #333;
+  padding: 15px;
+  color: white;
+}
+
+@keyframes modalopen {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.closeBtn {
+  color: rgb(255, 254, 254);
+  float: right;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.login-form-message{
+  display: none;
+  animation-name: modalopen;
+  animation-duration: 0.5s;
+}
+.signup-form-message{
+  display: none;
+  animation-name: modalopen;
+  animation-duration: 0.5s;
+}
+.material-icons{font-size: 1.7rem;}
+.navbar-brand{font-size: 1.6rem;}
+
+.sign-up-form {
+  padding: 20px 300px 40px 300px;
+}
+
+main a{
+  text-decoration: none;
+  color: #333;
+}
+main a:hover {
+  color: rgb(0, 108, 209);
+}
