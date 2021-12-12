@@ -57,11 +57,7 @@ body {
   animation-name: modalopen;
   animation-duration: 0.5s;
 }
-.signup-form-message{
-  display: none;
-  animation-name: modalopen;
-  animation-duration: 0.5s;
-}
+
 .material-icons{font-size: 1.7rem;}
 .navbar-brand{font-size: 1.6rem;}
 

@@ -34,7 +34,7 @@ if (window.location.href.includes("signup?next=")) {
   openModal();
 }
 
-// Sending Login form data to flask
+// Sending Login form data to back-end
 const loginForm = document.querySelector("#loginForm");
 
 loginForm.addEventListener("submit", (e) => {
@@ -66,50 +66,5 @@ loginForm.addEventListener("submit", (e) => {
     document.querySelector("#inputPassword").value = "";
   } else {
     document.querySelector(".login-form-message").style.display = "block";
-  }
-});
-
-// Sign Up form
-const signupForm = document.querySelector("#signupForm");
-signupForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  const inputName = document.querySelector("#signupInputName").value;
-  const inputEmail = document.querySelector("#signupInputEmail").value;
-  const inputPhone = document.querySelector("#signupInputPhone").value;
-  const inputPassword1 = document.querySelector("#signupInputPassword1").value;
-  const inputPassword2 = document.querySelector("#signupInputPassword2").value;
-
-  if (
-    inputPassword1 === inputPassword2 &&
-    inputName !== "" &&
-    inputEmail !== "" &&
-    inputPhone !== ""
-  ) {
-    const xml = new XMLHttpRequest();
-    const data = new FormData();
-
-    data.append("name", inputName);
-    data.append("email", inputEmail);
-    data.append("phone", inputPhone);
-    data.append("password1", inputPassword1);
-
-    xml.open("POST", "/signup", true);
-    xml.onload = function (e) {
-      if (xml.status === 200) {
-        window.location.href = "/user/account";
-      } else {
-        console.log(xml.status);
-      }
-    };
-    xml.send(data);
-    
-    document.querySelector("#signupInputName").value = "";
-    document.querySelector("#signupInputEmail").value = "";
-    document.querySelector("#signupInputPhone").value = "";
-    document.querySelector("#signupInputPassword1").value = "";
-    document.querySelector("#signupInputPassword2").value = "";
-  } else {
-    document.querySelector(".signup-form-message").style.display = "block";
   }
 });

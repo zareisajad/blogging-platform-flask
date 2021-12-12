@@ -3,7 +3,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 
 from app import app, login, db
 from app.models import User
-
+from app.forms import AddPostForm
 
 @login.user_loader
 def load_user(id):
@@ -17,12 +17,6 @@ def index():
 
 @app.route("/login-request", methods=["GET", "POST"])
 def login():
-    """
-    handle ajax request;
-    geting form data from login form,
-    check if email exist and password is correct
-    the log user in.
-    """
     if request.method == "POST":
         email = request.form.get("email")
         password = request.form.get("password")
@@ -35,23 +29,39 @@ def login():
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
-    """
-    handle ajax request;
-    geting form data from signup form,
-    add data to database.
-    """
     if request.method == "POST":
-        name = request.form.get("name")
+        fname = request.form.get("fname")
+        lname = request.form.get("lname")
+        username = request.form.get("username")
         email = request.form.get("email")
         phone = request.form.get("phone")
-        password = request.form.get("password1")
-        user = User(name=name, email=email, phone=phone)
-        user.set_password(password)
+        password1 = request.form.get("password1")
+        password2 = request.form.get("password1")
+        check_username = User.query.filter_by(username=username).first()
+        check_email = User.query.filter_by(email=email).first()
+        if check_email:
+            flash(
+                """
+                there is another user with this email! is that you? if yes.
+                plese login to your account""",
+                category='danger'
+            )
+            return redirect(url_for('signup'))
+        if check_username:
+            flash('this username is not avaiable!', category='danger')
+            return redirect(url_for('signup'))
+        if password1 != password2:
+            flash('both password fields should be match!', category='danger')
+            return redirect(url_for('signup'))
+        user = User(
+            username=username, email=email,
+            fname=fname, lname=lname, phone=phone
+        )
+        user.set_password(password1)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for("login"))
+        return redirect(url_for('login'))
     return render_template("sign_up.html", title="Sign up")
-
 
 
 @app.route('/logout')
@@ -64,3 +74,10 @@ def logout():
 @login_required
 def user_account():
     return render_template('user_account.html')
+
+
+@app.route("/user/post", methods=["GET", "POST"])
+@login_required
+def add_post():
+    form = AddPostForm()
+    return render_template('add_post.html', form=form, title='Add Post')

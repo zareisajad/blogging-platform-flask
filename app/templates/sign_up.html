@@ -1,28 +1,37 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2 class="text-center">Sign up and get a card</h2>
-<form class="sign-up-form" id="signupForm">
-    <div class="form-group">
-        <p class="signup-form-message alert alert-danger">Something's wrong please try again!!</p>
-        <label for="name" class="mb-1">Firstname and Lastname:</label>
-        <input name="name" type="name" class="form-control mb-2" id="signupInputName" placeholder="Enter your firstname and lastname...">
-    </div>
-    <div class="form-group mt-1">
-        <label for="email" class="mb-1">Email:</label>
-        <input name="email"" type="email" class="form-control" id="signupInputEmail" placeholder="Enter your email...">
-    </div>
-    <div class="form-group mt-1">
-        <label for="phone" class="mb-1">Phone:</label>
-        <input name="phone"" type="tel" class="form-control" id="signupInputPhone" placeholder="Enter your phone number...">
-    </div>
-    <div class="form-group mt-1">
-        <label for="password1" class="mb-1">Password:</label>
-        <input name="password1"" type="password" class="form-control" id="signupInputPassword1" placeholder="Enter password...">
-    </div>
-    <div class="form-group mt-1">
-        <label for="password2" class="mb-1">Confirm Password:</label>
-        <input name="password2"" type="password" class="form-control" id="signupInputPassword2" placeholder="Repeat password...">
+<h2 class="text-center">Create your account</h2>
+<form class="sign-up-form" id="signupForm" method="post">
+    <div class="row">
+        <div class="col-md-6 mt-1">
+            <label for="fname" class="mb-1">Firstname:</label>
+            <input name="fname" type="name" class="form-control mb-2" id="signupInputFname" placeholder="Enter your firstname...">
+        </div>
+        <div class="col-md-6 mt-1">
+            <label for="lname" class="mb-1">Lastname:</label>
+            <input name="lname" type="name" class="form-control mb-2" id="signupInputLname" placeholder="Enter your lastname...">
+        </div>
+        <div class="col-md-6 mt-1">
+            <label for="email" class="mb-1">Email:</label>
+            <input name="email"" type="email" class="form-control" id="signupInputEmail" placeholder="Enter your email...">
+        </div>
+        <div class="col-md-6 mt-1">
+            <label for="phone" class="mb-1">Phone:</label>
+            <input name="phone"" type="tel" class="form-control" id="signupInputPhone" placeholder="Enter your phone number...">
+        </div>
+        <div class="col-md-12 mt-1">
+            <label for="username" class="mb-1">Username:</label>
+            <input name="username" type="name" class="form-control mb-2" id="signupInputUsername" placeholder="enter a username...">
+        </div>
+        <div class="form-group">
+            <label for="password1" class="mb-1">Password:</label>
+            <input name="password1"" type="password" class="form-control" id="signupInputPassword1" placeholder="Enter password...">
+        </div>
+        <div class="form-group mt-1">
+            <label for="password2" class="mb-1">Confirm Password:</label>
+            <input name="password2"" type="password" class="form-control" id="signupInputPassword2" placeholder="Repeat password...">
+        </div>
     </div>
     <button type="submit" class="btn btn-info w-100 mt-3 mb-5">Sign Up</button>
 </form>

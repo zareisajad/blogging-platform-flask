@@ -11,8 +11,8 @@ migrate = Migrate(app, db)
 login = LoginManager(app)
 app.config.from_object(Config)
 login.login_view = 'signup'
-login.login_message = """if youre new here please fill the form to sign up!
-                            otherwise login to your account."""
+login.login_message = """if your'e new here please fill the form to sign up!
+                        otherwise login to your account."""
 login.login_message_category = 'danger'
 
 from app import app, routes
