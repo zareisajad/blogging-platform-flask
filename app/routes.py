@@ -42,7 +42,7 @@ def signup():
         email = request.form.get("email")
         phone = request.form.get("phone")
         password1 = request.form.get("password1")
-        password2 = request.form.get("password1")
+        password2 = request.form.get("password2")
         check_username = User.query.filter_by(username=username).first()
         check_email = User.query.filter_by(email=email).first()
         if check_email:
