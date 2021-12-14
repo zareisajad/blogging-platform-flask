@@ -34,13 +34,13 @@
               <a class="nav-link " href="#">Feed</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link " href="#">Explore</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link " href="#">Newst</a>
-            </li>
-            <li class="nav-item">
               <a class="nav-link " href="{{ url_for('add_post') }}">New Post</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="{{ url_for('add_post') }}">Likes</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " href="{{ url_for('add_post') }}">Saved</a>
             </li>
           </ul>
           <div class="pe-4">
@@ -105,11 +105,11 @@
             <div class="form-group">
               <p class="login-form-message alert alert-danger">Please fill the form and try again!!</p>
               <label for="exampleInputEmail1" class="mb-1">Email address:</label>
-              <input name="email" type="email" class="form-control mb-2" id="inputEmail" aria-describedby="emailHelp" placeholder="Enter email">
+              <input name="email" type="email" class="form-control mb-2" id="inputEmail" aria-describedby="emailHelp" placeholder="Enter email" required>
             </div>
             <div class="form-group mt-1">
               <label for="exampleInputPassword1" class="mb-1">Password:</label>
-              <input name="password"" type="password" class="form-control" id="inputPassword" placeholder="Password">
+              <input name="password"" type="password" class="form-control" id="inputPassword" placeholder="Password" required>
             </div>
             <button type="submit" class="btn btn-info w-100 mt-3 ">Submit</button>
         </form>

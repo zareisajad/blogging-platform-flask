@@ -46,9 +46,10 @@ def signup():
         check_username = User.query.filter_by(username=username).first()
         check_email = User.query.filter_by(email=email).first()
         if check_email:
-            flash("""
-                there is another user with this email! is that you? if yes.
-                plese login to your account""",
+            flash(
+                """
+                there is a user with this email, 
+                if that is you plese login to your account""",
                 category='danger'
             )
             return redirect(url_for('signup'))

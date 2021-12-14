@@ -5,9 +5,11 @@ __pycache__/
 
 # C extensions
 *.so
+*.jpg
 
 app.db
 .flaskenv
+/images/
 
 # Distribution / packaging
 .Python
