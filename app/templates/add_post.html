@@ -3,13 +3,22 @@
 {% block content %}
 <main>
     <div class="row">
-        <div class="col-md-3">
+        <!-- sidebar -->
+        <div class="col-md-3 mt-2 rounded">
             <li class="list-group-item bg-dark text-light text-center text-capitalize">
+                <h5>Add new category</h5>
+                <li class="list-group-item"><a href="#"></a>
+                    <div class="p-3">
+                        <form action="{{ url_for('add_category') }}" method="post">
+                            <label for="category">Title:</label>
+                            <input class="form-control" name="category" type="text" placeholder="programming...">
+                            <button class="btn btn-outline-secondary mt-2 w-100">submit</button>
+                        </form>
+                    </div>
+                </li>
             </li>
-            <li class="list-group-item"><a href="#"></a></li>
-            <li class="list-group-item"><a href="#"></a></li>
-            <li class="list-group-item"><a href="#"></a></li>
         </div>
+        <!-- content -->
         <div class="col-md-9">
             <h2>Add New Post</h2>
             <hr>
@@ -17,20 +26,30 @@
                 <form method="post">
                     {{ form.hidden_tag() }}
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <label class="mb-1"  for="bookid">featuring image:</label>
                         {{ form.featuring_image(class_='form-control') }}
+                    </div>
+                    <div class="col-md-6">
+                        <label class="mb-1"  for="bookid">Category:</label>
+                        {{ form.category(class_='form-control') }}
                     </div>
                     <div class="col-md-12 mt-2">
                         <label class="mb-1"  for="cardid">Post title:</label>
                         {{ form.title(class_='form-control') }}
                     </div>
-                    <div class=" rounded p-2 mt-2">
+                    <div class="mt-2">
                         <label class="mb-1"  for="editordata">Post Content:</label>
-                        <textarea id="summernote" name="editordata"></textarea>
+                        <div class="bg-light rounded">
+                            <textarea id="summernote" name="editordata"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt-2">
+                        <label class="mb-1"  for="cardid">Tags (separate with comma):</label>
+                        {{ form.tags(class_='form-control') }}
                     </div>
                 </div>
-                <button class="w-100 btn btn-info mt-3" type="submit">Submit</button>
+                <button class="w-100 btn btn-info mt-3" type="submit">Publish Post</button>
                 </form>
             </div>
         </div>

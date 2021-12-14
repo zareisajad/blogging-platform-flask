@@ -2,8 +2,9 @@ from flask import render_template, flash, redirect, url_for, request, abort
 from flask_login import current_user, login_user, logout_user, login_required
 
 from app import app, login, db
-from app.models import User
+from app.models import User, Category
 from app.forms import AddPostForm
+
 
 @login.user_loader
 def load_user(id):
@@ -40,8 +41,7 @@ def signup():
         check_username = User.query.filter_by(username=username).first()
         check_email = User.query.filter_by(email=email).first()
         if check_email:
-            flash(
-                """
+            flash("""
                 there is another user with this email! is that you? if yes.
                 plese login to your account""",
                 category='danger'
@@ -76,8 +76,22 @@ def user_account():
     return render_template('user_account.html')
 
 
-@app.route("/user/post", methods=["GET", "POST"])
+@app.route("/add/post", methods=["GET", "POST"])
 @login_required
 def add_post():
     form = AddPostForm()
     return render_template('add_post.html', form=form, title='Add Post')
+
+
+@app.route("/add/category", methods=["GET", "POST"])
+@login_required
+def add_category():
+    if request.method == 'POST':
+        title = request.form.get('category')
+        if not Category.query.filter_by(title=title).first():
+            category = Category(title=title)
+            db.session.add(category)
+            db.session.commit()
+            return redirect(url_for("add_post"))
+    return redirect(url_for("add_post"))
+

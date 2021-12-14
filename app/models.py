@@ -21,3 +21,21 @@ class User(db.Model, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.password, password)
+
+
+class Post(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    image = db.Column(db.String(200))
+    title = db.Column(db.String(300))
+    tags = db.Column(db.String(600))
+    content = db.Column(db.String(800))
+    category = db.relationship('Category', backref='category')
+
+
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200))
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+
+    def __repr__(self):
+        return '{}'.format(self.title)
