@@ -12,6 +12,7 @@ class User(db.Model, UserMixin):
     phone = db.Column(db.String(80))
     email = db.Column(db.String(120), index=True, unique=True)
     password = db.Column(db.String(128))
+    posts = db.relationship('Post', backref='posts')
 
     def __repr__(self):
         return '<User {}>'.format(self.email)
@@ -29,13 +30,15 @@ class Post(db.Model):
     title = db.Column(db.String(300))
     tags = db.Column(db.String(600))
     content = db.Column(db.String(800))
-    category = db.relationship('Category', backref='category')
+    author = db.relationship('User', backref='author',overlaps="posts,posts")
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
 
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200))
-    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
 
     def __repr__(self):
         return '{}'.format(self.title)

@@ -8,15 +8,13 @@ from app.models import Category
 
 
 def enabled_categories():
-    categories = Category.query.all()
-    
     return Category.query.all()
     
 
 class AddPostForm(FlaskForm):
     featuring_image = FileField(
         render_kw={'accept': 'image/*'},
-        validators=[FileAllowed(['jpg', 'png', 'jpeg'])]
+        validators=[DataRequired(), FileAllowed(['jpg', 'png', 'jpeg'])]
     )
     title = StringField(
         render_kw={'placeholder': 'Example(How to create a flask app!)'},

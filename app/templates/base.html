@@ -24,11 +24,11 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand text-info" href="{{url_for('index')}}">Flask <i class="material-icons">&#xe1b2;</i> Blog</a>
+        <a class="navbar-brand text-info" href="{{url_for('explore')}}">Flask <i class="material-icons">&#xe1b2;</i> Blog</a>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link home" aria-current="page" href="{{url_for('index')}}">Home</a>
+              <a class="nav-link home" aria-current="page" href="{{url_for('explore')}}">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link " href="#">Feed</a>
@@ -63,7 +63,7 @@
           </div>
           <form class="d-flex">
             <input class="form-control search-form" type="search" placeholder="title,author..." aria-label="Search">
-            <button class="btn btn-outline-primary ms-1" type="submit">Search</button>
+            <button class="btn btn-outline-info ms-1" type="submit">Search</button>
           </form>
         </div>
       </div>
@@ -73,71 +73,11 @@
     <div class="container">
         <div class="collapse navbar-collapse">
           <ul class="navbar-nav me-auto mb-2 mb-sm-0 text-capitalize">
+        {% for i in category %}
         <li class="nav-item">
-          <a class="nav-link" href="#">
-            Programming
-          </a>
+          <a class="nav-link" href="{{ url_for('filter_by_category', id=i.id) }}">{{i.title}}</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-              Business
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">
-              Life Style
-            </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            Music
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            Fun
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            Movies
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            Book
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            Fashion
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            Marketing
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            Beauty
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            Economy
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            Story
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            Journal
-          </a>
-        </li>
+        {% endfor %}
         <li class="nav-item">
           <a class="nav-link" href="#">
             See All

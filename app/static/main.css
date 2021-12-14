@@ -72,3 +72,21 @@ main a{
 main a:hover {
   color: rgb(0, 108, 209);
 }
+
+.post-card-img {
+  height: 350px;
+  width: 100%;
+  object-fit: cover;  
+}
+.author-post-avatar {
+  border-radius: 90%;
+  width: 60px;
+  height: 60px;
+}
+.post-card-content {
+  display: block;
+  width: 90%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

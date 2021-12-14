@@ -11,7 +11,7 @@
                     <div class="p-3">
                         <form action="{{ url_for('add_category') }}" method="post">
                             <label for="category">Title:</label>
-                            <input class="form-control" name="category" type="text" placeholder="programming...">
+                            <input class="form-control" name="category" type="text" placeholder="programming..." required>
                             <button class="btn btn-outline-secondary mt-2 w-100">submit</button>
                         </form>
                     </div>
@@ -23,7 +23,7 @@
             <h2>Add New Post</h2>
             <hr>
             <div class="text-capitalize mt-3">
-                <form method="post">
+                <form  method="POST" action="" enctype="multipart/form-data">
                     {{ form.hidden_tag() }}
                 <div class="row">
                     <div class="col-md-6">
