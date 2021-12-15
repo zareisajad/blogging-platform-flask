@@ -1,38 +1,37 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2 class="text-center">Create your account</h2>
 <form class="sign-up-form" id="signupForm" method="post">
-    <div class="row">
-        <div class="col-md-6 mt-1">
-            <label for="fname" class="mb-1">Firstname:</label>
-            <input name="fname" type="name" class="form-control mb-2" id="signupInputFname" placeholder="Enter your firstname..." required>
-        </div>
-        <div class="col-md-6 mt-1">
-            <label for="lname" class="mb-1">Lastname:</label>
-            <input name="lname" type="name" class="form-control mb-2" id="signupInputLname" placeholder="Enter your lastname..." required>
-        </div>
-        <div class="col-md-6 mt-1">
+    <h2 class="text-center">Create your account</h2>
+    <hr>
+    {{ form.hidden_tag() }}
+    <div class="">
+        <div class="mt-1">
             <label for="email" class="mb-1">Email:</label>
-            <input name="email"" type="email" class="form-control" id="signupInputEmail" placeholder="Enter your email..." required>
+            {{ form.email(class_='form-control') }}
+            {% for error in form.email.errors %}
+            <span class="text-danger mt-1">{{error}}</span>
+            {% endfor %}
         </div>
-        <div class="col-md-6 mt-1">
-            <label for="phone" class="mb-1">Phone:</label>
-            <input name="phone"" type="tel" class="form-control" id="signupInputPhone" placeholder="Enter your phone number..." required>
+        <div class="mt-1">
+            <label for="username" class="mb-1">username:</label>
+            {{ form.username(class_='form-control') }}
+            {% for error in form.username.errors %}
+            <span class="text-danger mt-1">{{error}}</span>
+            {% endfor %}
         </div>
-        <div class="col-md-12 mt-1">
-            <label for="username" class="mb-1">Username:</label>
-            <input name="username" type="name" class="form-control mb-2" id="signupInputUsername" placeholder="enter a username..." required>
+        <div class="mt-1">
+            <label for="password" class="mb-1">Password:</label>
+            {{ form.password(class_='form-control') }}
+            {% for error in form.password.errors %}
+            <span class="text-danger mt-1">{{error}}</span>
+            {% endfor %}
         </div>
-        <div class="form-group">
-            <label for="password1" class="mb-1">Password:</label>
-            <input name="password1"" type="password" class="form-control" id="signupInputPassword1" placeholder="Enter password..." required>
-        </div>
-        <div class="form-group mt-1">
-            <label for="password2" class="mb-1">Confirm Password:</label>
-            <input name="password2"" type="password" class="form-control" id="signupInputPassword2" placeholder="Repeat password..." required>
+        <div class="mt-1">
+            <label for="confirmpassword" class="mb-1">Confirm Password:</label>
+            {{ form.confirm_password(class_='form-control') }}
         </div>
     </div>
-    <button type="submit" class="btn btn-info w-100 mt-3 mb-5">Sign Up</button>
+    <button type="submit" class="btn btn-primary w-100 mt-3 mb-5">Sign Up</button>
 </form>
 {% endblock %}

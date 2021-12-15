@@ -42,6 +42,9 @@
             <li class="nav-item">
               <a class="nav-link " href="{{ url_for('add_post') }}">Saved</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link " href="{{ url_for('setting') }}">Setting</a>
+            </li>
           </ul>
           <div class="pe-4">
             <ul class="navbar-nav">
@@ -54,7 +57,7 @@
               </li>
               <li class="nav-item">
                 {% if current_user.is_authenticated %}              
-                <a class="btn btn-success ms-1" id="signupBtn" href="{{url_for('user_account')}}">Profile</a>
+                <a class="btn btn-success ms-1" id="signupBtn" href="{{url_for('profile' ,username=current_user.username)}}">Profile</a>
                 {% else %}
                 <a class="btn btn-info ms-1" id="signupBtn" href="{{url_for('signup')}}">Start writing</a>
                 {% endif %}

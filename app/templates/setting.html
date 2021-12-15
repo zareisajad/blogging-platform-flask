@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main>
+    <div class="row">
+        <div class="col-md-3 rounded">
+            <li class="list-group-item bg-dark text-light text-center text-capitalize">
+                Welcome Back {{current_user.username}}
+            </li>
+            <li class="list-group-item"><a href="{{ url_for('setting') }}">Edit profile information</a></li>
+            <li class="list-group-item"><a href="#">Change Password</a></li>
+            <li class="list-group-item"><a class="text-danger" href="#">Delete Account</a></li>
+          </div>
+        <div class="col-md-8 ms-5 text-capitalize">
+          <h2>Edit Profile</h2>
+          <hr>
+          <form  method="POST" action="" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <div class="row">
+              <div class="col-md-10 mt-1">
+                <label for="email" class="mb-1">Avatar image:</label>
+                {{ form.avatar(class_='form-control') }}
+              </div>
+              <div class="col-md-1 mt-1">
+                <img class="edit-profile-avatar rounded" src="{{ url_for('static', filename=current_user.profile.avatar)}}" alt="">
+              </div>
+              <div class="col-md-6 mt-1 mb-2">
+                  <label for="email" class="mb-1">first name:</label>
+                  {{ form.fname(class_='form-control') }}
+              </div>
+              <div class="col-md-6 mt-1 mb-2">
+                <label for="email" class="mb-1">last name:</label>
+                {{ form.lname(class_='form-control') }}
+              </div>
+              <div class="col-md-12 mt-1 mb-2">
+                <label for="email" class="mb-1">Bio:</label>
+                {{ form.about(class_='form-control') }}
+              </div>
+            </div>
+            <button class="btn btn-primary w-100 mt-3">Save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main>
+    <!-- sidebar -->
+    <div class="row">
+        <div class="col-md-2 ms-">
+        </div>
+        <div class="col-md-8 bg-light rounded">
+            <div class="row mt-4">
+                <div class="col-md-1">
+                    <!-- author avatar -->
+                    <a href="{{ url_for('profile', username=post.author.username) }}">
+                        <img class="author-post-avatar" src="{{ url_for('static', filename=post.author.profile.avatar)}}" alt="">
+                    </a>
+                </div>
+                <div class="col-md-11 mt-1">
+                    <!-- author username -->
+                    <a href="{{ url_for('profile', username=post.author.username) }}">{{ post.author.username }} <br></a>
+                    <!-- published date -->
+                    <p class="text-muted">12 minutes ago</p>
+                </div>
+            </div>
+            <!-- post title -->
+            <h2 class="text-primary mt-3 mb-4">{{ post.title }}</h2>
+            <!-- post image -->
+            <img class="w-100 h-90 rounded" src="{{ url_for('static', filename=post.image)}}" alt="">
+            <!-- post content -->
+            <div class="pe-5 mt-3 mb-3 post-card-content" >{{ post.content|safe }}</div>
+        </div>
+        <div class="col-md-2 ms-">
+        </div>
+      </div>
+    </div>
+</main> 
+{% endblock %}

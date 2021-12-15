@@ -21,13 +21,15 @@
                 <div class="row">
                     <div class="col-md-1">
                         <!-- author avatar -->
-                        <img class="author-post-avatar" src="../static/images/17-176700_wonder-woman-1984-gal-gadot.jpg" alt="author avatar">
+                        <a href="{{ url_for('profile', username=post.author.username) }}">
+                            <img class="author-post-avatar" src="{{ url_for('static', filename=post.author.profile.avatar)}}" alt="">
+                        </a>
                     </div>
                     <div class="col-md-11 mt-1">
                         <!-- save btn -->
                         <a href=""><i style="float: right;" class="material-icons mt-1">&#xe867;</i></a>
                         <!-- author username -->
-                        <a href="">{{ post.author.username }} <br></a>
+                        <a href="{{ url_for('profile', username=post.author.username) }}">{{ post.author.username }} <br></a>
                         <!-- published date -->
                         <p class="text-muted">12 minutes ago</p>
                     </div>
@@ -37,11 +39,13 @@
                 <!-- post image -->
                 <img class="post-card-img rounded" src="{{ url_for('static', filename=post.image)}}" alt="">
                 <!-- post content -->
-                <div class="pe-5 mt-3 mb-3 post-card-content" >{{ post.content }}</div>
+                <div class="pe-5 mt-3 mb-3 post-card-content" >{{ post.content|safe }}</div>
                 <!-- like btn -->
                 <a href="#"><i style="float: right;" class="material-icons mt-2">&#xe87e;</i></a>
                 <!-- read more btn -->
-                <button class="btn btn-outline-primary">Read More</button>
+                <a class="btn btn-primary" href="{{ url_for('post_detail', title=post.title) }}">
+                    Read More
+                </a> 
             </div>
             {% endfor %}
         </div>

@@ -82,6 +82,8 @@ main a:hover {
   border-radius: 90%;
   width: 60px;
   height: 60px;
+  object-fit: cover; 
+
 }
 .post-card-content {
   display: block;
@@ -89,4 +91,9 @@ main a:hover {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+.edit-profile-avatar{
+  height: 113px;
+  width: 113px;
+  object-fit: cover; 
 }
