@@ -53,7 +53,7 @@ loginForm.addEventListener("submit", (e) => {
     xml.open("POST", "/login-request", true);
     xml.onload = function (e) {
       if (xml.status === 200) {
-        window.location.href = "/user/profile";
+        window.location.href = "/user/setting";
       } else {
         document.querySelector(".login-form-message").innerHTML =
           "Something went wrong!";

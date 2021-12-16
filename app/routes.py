@@ -6,8 +6,8 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.utils import secure_filename
 
 from app import app, login, db
-from app.models import User, Category, Post, Profile
-from app.forms import AddPostForm, ProfileForm, SignupForm
+from app.models import User, Category, Post, Profile, Comment
+from app.forms import AddPostForm, ProfileForm, SignupForm, CommentForm
 
 
 @login.user_loader
@@ -30,7 +30,7 @@ def login():
         if not user or not user.check_password(password):
             abort(404)
         login_user(user)
-    return redirect(url_for("explore"))
+    return redirect(url_for("setting"))
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -62,7 +62,7 @@ def upload_img(img_file):
     filename = img.filename
     if filename != '':
         img_name = filename.split('.')
-        img_name[0] = current_user.profile.fname + str(current_user.id) + '.'
+        img_name[0] = current_user.username + str(current_user.id) + '.'
         name = ''.join(img_name)
         filename = secure_filename(name)
         img.save(os.path.join(app.config["UPLOAD_PATH"], filename))
@@ -80,6 +80,7 @@ def setting():
                 avatar=upload_img(form.avatar.data),
                 fname=form.fname.data,
                 lname=form.lname.data,
+                about=form.about.data,
                 user_id=current_user.id
             )
             db.session.add(profile)
@@ -96,7 +97,7 @@ def setting():
                 p.avatar = upload_img(form.avatar.data)
             db.session.commit()
             flash('Profil has been updated!', category='success')
-            return redirect(url_for('setting'))
+            return redirect(url_for('profile', username=current_user.username))
     else:
         if current_user.profile:
             form.fname.data = current_user.profile.fname
@@ -109,7 +110,7 @@ def setting():
 @login_required
 def profile(username):
     user = User.query.filter_by(username=username).first()
-    return render_template('profile.html')
+    return render_template('profile.html', user=user)
 
 
 @app.route("/add/post", methods=["GET", "POST"])
@@ -128,6 +129,7 @@ def add_post():
                 request.form.get('editordata'),
                 tags=app.config["ALLOWED_TAGS"],
                 attributes=app.config["ALLOWED_ATTRIBUTES"],
+                styles=app.config['ALLOWED_STYLES']
             )
             category = Category.query.filter_by(
                 title=str(form.category.data)
@@ -142,15 +144,45 @@ def add_post():
             )
             db.session.add(post)
             db.session.commit()
-            return redirect(url_for('add_post'))
+            return redirect(url_for('post_detail', title=post.title))
     return render_template('add_post.html', form=form, title='Add Post')
+
+
+@app.route("/posts/delete/<id>", methods=["GET", "POST"])
+@login_required
+def delete_post(id):
+    post = Post.query.filter_by(id=id).first_or_404()
+    post_image = 'app/static' + post.image
+    if os.path.isfile(post_image):
+        os.remove(post_image)
+    db.session.delete(post)
+    db.session.commit()
+    flash('post has been deleted!', category='info')
+    return redirect(url_for('profile', username=current_user.username))
 
 
 @app.route("/posts/<title>", methods=["GET", "POST"])
 @login_required
 def post_detail(title):
+    form = CommentForm()
     post = Post.query.filter_by(title=title).first()
-    return render_template('post_detail.html', post=post)
+    tags = post.tags.split(',')
+    comments = Comment.query.all()
+    if form.validate_on_submit():
+        comment = Comment(
+            comment=form.comment.data,
+            username=form.username.data,
+            post_id=post.id
+        )
+        db.session.add(comment)
+        db.session.commit()
+        flash('Your comment has been published!', category='success')
+        return redirect(url_for('post_detail', title=post.title))
+    if request.method == 'GET':
+        form.username.data = current_user.username
+    return render_template(
+        'post_detail.html', post=post, tags=tags, comments=comments, form=form
+    )
 
 
 @app.route("/add/category", methods=["GET", "POST"])
@@ -173,8 +205,16 @@ def pass_category():
     return dict(category=category)
 
 
-@app.route("/filter/category/<id>", methods=["GET", "POST"])
+@app.route("/filter/category/<category>", methods=["GET", "POST"])
 @login_required
-def filter_by_category(id):
-    posts = Post.query.filter_by(category_id=id).all()
+def filter_by_category(category):
+    c = Category.query.filter_by(title=category).first()
+    posts = Post.query.filter_by(category_id=c.id).all()
+    return render_template('explore.html', posts=posts)
+
+
+@app.route("/filter/tag/<tag>", methods=["GET", "POST"])
+@login_required
+def filter_by_tags(tag):
+    posts = Post.query.filter(Post.tags.contains(tag)).all()
     return render_template('explore.html', posts=posts)

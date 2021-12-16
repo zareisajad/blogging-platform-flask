@@ -9,7 +9,7 @@
             <li class="list-group-item"><a href="#"></a>
                 <h4>Top posts:</h4>
                 {% for post in posts %}
-                <img style="height: 80px; width: 80px;"  src="{{ url_for('static', filename=post.image)}}" alt="">
+                <img style="height: 80px; width: 80px;" class="mt-2 rounded" src="{{ url_for('static', filename=post.image)}}" alt="">
                 {{post.title}} <br>
                 {% endfor %}
             </li>
@@ -35,15 +35,17 @@
                     </div>
                 </div>
                 <!-- post title -->
-                <h2 class="text-primary mt-3 mb-4">{{ post.title }}</h2>
+                <h2 class="mt-3 mb-4">
+                    <a class="text-primary" href="{{ url_for('post_detail', title=post.title) }}">
+                        {{ post.title }}
+                    </a>
+                </h2>
                 <!-- post image -->
                 <img class="post-card-img rounded" src="{{ url_for('static', filename=post.image)}}" alt="">
-                <!-- post content -->
-                <div class="pe-5 mt-3 mb-3 post-card-content" >{{ post.content|safe }}</div>
                 <!-- like btn -->
-                <a href="#"><i style="float: right;" class="material-icons mt-2">&#xe87e;</i></a>
+                <a href="#"><i style="float: right;" class="material-icons mt-4">&#xe87e;</i></a>
                 <!-- read more btn -->
-                <a class="btn btn-primary" href="{{ url_for('post_detail', title=post.title) }}">
+                <a class="btn btn-primary mt-3" href="{{ url_for('post_detail', title=post.title) }}">
                     Read More
                 </a> 
             </div>

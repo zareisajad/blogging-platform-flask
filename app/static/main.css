@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Raleway:200,100,400");
 
+
 body {
   background: #ccc;
   font-family: "Raleway", sans-serif;
@@ -74,7 +75,7 @@ main a:hover {
 }
 
 .post-card-img {
-  height: 350px;
+  height: 330px;
   width: 100%;
   object-fit: cover;  
 }
@@ -96,4 +97,19 @@ main a:hover {
   height: 113px;
   width: 113px;
   object-fit: cover; 
+}
+.profile-avatar{
+  border-radius: 90%;
+  width: 180px;
+  height: 180px;
+  object-fit: cover; 
+}
+.profile-post-img {
+  width: 250px;
+  height: 300px;
+  object-fit: cover; 
+}
+
+.post-detail-icons{
+  vertical-align: middle;
 }

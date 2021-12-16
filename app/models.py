@@ -24,11 +24,18 @@ class User(db.Model, UserMixin):
 
 class Profile(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    avatar = db.Column(db.String(200), default='images/default.png')
+    avatar = db.Column(db.String(200), nullable=False ,default='images/default.png')
     fname = db.Column(db.String(120))
     lname = db.Column(db.String(120))
     about = db.Column(db.String(250))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    comment = db.Column(db.String(300))
+    username = db.Column(db.String(150))
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
 
 
 class Post(db.Model):
@@ -38,7 +45,7 @@ class Post(db.Model):
     tags = db.Column(db.String(600))
     content = db.Column(db.String(800))
     author = db.relationship('User', backref='author',overlaps="posts")
-
+    comment = db.relationship('Comment', backref='comments')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
 

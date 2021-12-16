@@ -84,3 +84,14 @@ class ProfileForm(FlaskForm):
         },
         validators=[DataRequired()]
     )
+
+
+class CommentForm(FlaskForm):
+    username = StringField(
+        render_kw={'placeholder': 'username'},
+        validators=[DataRequired()]
+    )
+    comment = TextAreaField(
+        render_kw={'placeholder': 'write comment','cols':'30', 'rows':'5'},
+        validators=[DataRequired()]
+    )

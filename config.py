@@ -17,11 +17,14 @@ class Config(object):
 
     ALLOWED_TAGS = bleach.sanitizer.ALLOWED_TAGS + [
         'p','h1','h2','h3','h4','h5', 'div',
-        'h6','br','img','font'
+        'h6','br','img','font','span','i','b','src'
     ]
     ALLOWED_ATTRIBUTES = {
         '*': ['style', 'id', 'class'],
         'font': ['color'],
         'a': ['href'],
-        'img': ['src', 'alt']
+        'img': ['src', 'alt'],
     }
+    ALLOWED_STYLES = bleach.sanitizer.ALLOWED_STYLES + [
+        'color', 'background-color', 'width', 'height'
+    ]

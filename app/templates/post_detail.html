@@ -15,6 +15,9 @@
                     </a>
                 </div>
                 <div class="col-md-11 mt-1">
+                    {% if current_user.username == post.author.username %}
+                    <a style="float: right;" href="{{ url_for('delete_post', id=post.id) }}" class="btn btn-outline-danger">delete post</a>
+                    {% endif %}
                     <!-- author username -->
                     <a href="{{ url_for('profile', username=post.author.username) }}">{{ post.author.username }} <br></a>
                     <!-- published date -->
@@ -26,11 +29,59 @@
             <!-- post image -->
             <img class="w-100 h-90 rounded" src="{{ url_for('static', filename=post.image)}}" alt="">
             <!-- post content -->
-            <div class="pe-5 mt-3 mb-3 post-card-content" >{{ post.content|safe }}</div>
+            <div class="pe-5 mt-5 mb-5" >{{ post.content|safe }}</div>
+            <!-- save btn -->
+            <a class="text-danger" href=""><i class="material-icons post-detail-icons">&#xe87e;</i> Like it</a>
+            <!-- like btn -->
+            <div style="float: right;">
+                <a class="text-primary" href="#">Save it <i class="material-icons post-detail-icons">&#xe867;</i></a>
+            </div>
+            <!-- post tags -->
+            <div class="pt-4 pb-3">
+                {% for tag in tags %}
+                <span><a href="{{ url_for('filter_by_tags', tag=tag) }}" class="btn btn-primary">{{ tag }}</a></span>
+                {% endfor %}
+            </div>
+            <hr class="dropdown-divider">
+            <!-- comments -->
+            <div class="">
+                <h5 class="text-center" id="commentBtn" style="cursor: pointer;">View Comments</h5>
+                <div id="comments" style="display: none;">
+                    {% for comment in comments %}
+                        <div class="mt-1 ps-4">
+                            <!-- author username -->
+                            <a href="{{ url_for('profile', username=comment.username) }}">{{ comment.username }} <br></a>
+                            <p class="text-muted">12 minutes ago</p>
+                            <p>{{ comment.comment }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <!-- comments form -->
+            <div class="p-4">
+                <form method="post">
+                    {{ form.hidden_tag() }}
+                        <div class="mb-2">
+                            <label class="mb-1" for="comment">Username:</label>
+                            {{ form.username(class_='form-control') }}
+                        </div>
+                        <div class="">
+                            <label class="mb-1" for="comment">Write Comment:</label>
+                            {{ form.comment(class_='form-control') }}
+                        </div>
+                    <button class="btn btn-primary mt-3 w-100" type="submit">Publish</button>
+                </form>
+            </div>
         </div>
         <div class="col-md-2 ms-">
         </div>
       </div>
     </div>
 </main> 
+<script>
+    document.querySelector('#commentBtn').addEventListener('click', () => {
+        document.querySelector('#comments').style.display = 'block';
+        document.querySelector('#commentBtn').textContent = 'Comments';
+    })
+</script>
 {% endblock %}
