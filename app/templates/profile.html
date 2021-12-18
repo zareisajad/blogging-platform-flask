@@ -10,22 +10,45 @@
             <div class="row bg-light rounded p-4 mb-4">
                 <div class="col-md-4">
                     <!-- profile avatar -->
-                    <img class="profile-avatar ms-5" src="{{ url_for('static', filename=user.profile.avatar)}}" alt="">
+                    <img class="profile-avatar ms-5" src="{{ url_for('static', filename=user.avatar)}}" alt="">
                 </div>
                 <div class="col-md-8">
                     <!-- username -->
                     {% if current_user.username == user.username  %}
                     <span class="h3 me-3">{{ user.username }}</span> <a class="btn btn-outline-primary mb-2" href="{{ url_for('setting') }}">Edit profile</a><br>
+                    {% elif not current_user.is_following(user) %}
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <span class="h3">{{ user.username }}</span><br>
+                        </div>
+                        <div class="col-md-5">
+                            <form action="{{ url_for('follow', username=user.username) }}" method="post">
+                                {{ form.hidden_tag() }}
+                                {{ form.submit(value='Follow') }}
+                            </form>
+                        </div>
+                    </div>
                     {% else %}
-                    <span class="h3 me-3">{{ user.username }}</span> <a class="btn btn-primary mb-2" href="">Follow</a><br>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <span class="h3">{{ user.username }}</span><br>
+                        </div>
+                        <div class="col-md-5">
+                            <form action="{{ url_for('unfollow', username=user.username) }}" method="post">
+                                {{ form.hidden_tag() }}
+                                {{ form.submit(value='Unfollow') }}
+                            </form>
+                        </div>
+                    </div>
                     {% endif %}
                     <br>
                     <!-- posts -->
-                    <span class="h5 me-5" style="font-family: 'Gill Sans', sans-serif;"><b>{{ user.posts | length }}</b> Posts</span>
+                    <span class="h5 me-5" style="font-family: 'Gill Sans', sans-serif;"><b>{{ user.posts.count() }}</b> Posts</span>
                     <!-- followers -->
-                    <span class="h5 me-5" style="font-family: 'Gill Sans', sans-serif;">0 Follower</span>
+                    <span class="h5 me-5" style="font-family: 'Gill Sans', sans-serif;"><b>{{ user.followers.count() }}</b> Followers</span>
                     <!-- following -->
-                    <span class="h5" style="font-family: 'Gill Sans', sans-serif;">0 Following</span>
+                    <span class="h5" style="font-family: 'Gill Sans', sans-serif;"><b>{{ user.followed.count() }}</b> Following</span>
                     <!-- name  -->
                     <h6 class="mt-4 text-capitalize"><b>{{ user.profile.fname }} {{ user.profile.lname }}</b></h6>
                     <!-- bio -->
@@ -36,8 +59,6 @@
             <div class="row">
             {% for post in user.posts %}
                 <div class="col-md-3 bg-light me-2 mb-2 rounded">
-                    <!-- published date -->
-                    <p class="text-muted mt-2">12 minutes ago</p>
                     <!-- post title -->
                     <a href="{{ url_for('post_detail', title=post.title) }}">
                         <h5 class="text-primary mt-3 mb-3">{{ post.title }}</h5>
@@ -46,6 +67,8 @@
                     <a href="{{ url_for('post_detail', title=post.title) }}">
                         <img class="profile-post-img rounded pb-3" src="{{ url_for('static', filename=post.image)}}" alt="">
                     </a>
+                    <!-- published date -->
+                    <p style="font-family: sans-serif;" class="text-muted ps-1">Published at: {{ post.create_date.strftime('%Y/%m/%d') }}</p>
                 </div>
             {% endfor %}
             </div>

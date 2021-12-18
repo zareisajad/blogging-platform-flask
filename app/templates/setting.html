@@ -9,7 +9,7 @@
             </li>
             <li class="list-group-item"><a href="{{ url_for('setting') }}">Edit profile information</a></li>
             <li class="list-group-item"><a href="#">Change Password</a></li>
-            <li class="list-group-item"><a class="text-danger" href="#">Delete Account</a></li>
+            <li class="list-group-item"><a class="text-danger" href="{{ url_for('delete_account', id=current_user.id) }}">Delete Account</a></li>
           </div>
         <div class="col-md-8 ms-5 text-capitalize">
           <h2>Edit Profile</h2>
@@ -22,7 +22,7 @@
                 {{ form.avatar(class_='form-control') }}
               </div>
               <div class="col-md-1 mt-1">
-                <img class="edit-profile-avatar rounded" src="{{ url_for('static', filename=current_user.profile.avatar)}}" alt="">
+                <img class="edit-profile-avatar rounded" src="{{ url_for('static', filename=current_user.avatar)}}" alt="">
               </div>
               <div class="col-md-6 mt-1 mb-2">
                   <label for="email" class="mb-1">first name:</label>

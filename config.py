@@ -14,7 +14,6 @@ class Config(object):
         'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     UPLOAD_PATH = os.path.join('app/static/images')
-
     ALLOWED_TAGS = bleach.sanitizer.ALLOWED_TAGS + [
         'p','h1','h2','h3','h4','h5', 'div',
         'h6','br','img','font','span','i','b','src'
@@ -28,3 +27,4 @@ class Config(object):
     ALLOWED_STYLES = bleach.sanitizer.ALLOWED_STYLES + [
         'color', 'background-color', 'width', 'height'
     ]
+    POSTS_PER_PAGE = 15

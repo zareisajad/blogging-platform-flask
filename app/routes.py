@@ -1,13 +1,16 @@
 import os
 import bleach
+import datetime
 
 from flask import render_template, flash, redirect, url_for, request, abort
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.utils import secure_filename
+from werkzeug.urls import url_parse
+from sqlalchemy import desc
 
 from app import app, login, db
 from app.models import User, Category, Post, Profile, Comment
-from app.forms import AddPostForm, ProfileForm, SignupForm, CommentForm
+from app.forms import AddPostForm, ProfileForm, SignupForm, CommentForm, EmptyForm
 
 
 @login.user_loader
@@ -16,9 +19,23 @@ def load_user(id):
 
 
 @app.route("/", methods=["GET", "POST"])
+@app.route("/explore", methods=["GET", "POST"])
 def explore():
-    posts = Post.query.all()
-    return render_template('explore.html', posts=posts)
+    comments = Comment.query.all()
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.order_by(desc(Post.create_date)).paginate(
+        page, app.config['POSTS_PER_PAGE'], False
+    )
+    next_url = url_for(
+        'explore', page=posts.next_num
+    ) if posts.has_next else None
+    prev_url = url_for(
+        'explore', page=posts.prev_num
+    ) if posts.has_prev else None
+    return render_template(
+        'explore.html', title='explore', posts=posts.items,
+        next_url=next_url, prev_url=prev_url, comments=comments
+    )
 
 
 @app.route("/login-request", methods=["GET", "POST"])
@@ -62,7 +79,7 @@ def upload_img(img_file):
     filename = img.filename
     if filename != '':
         img_name = filename.split('.')
-        img_name[0] = current_user.username + str(current_user.id) + '.'
+        img_name[0] = current_user.username + '.'
         name = ''.join(img_name)
         filename = secure_filename(name)
         img.save(os.path.join(app.config["UPLOAD_PATH"], filename))
@@ -77,16 +94,17 @@ def setting():
     if form.validate_on_submit():
         if not current_user.profile:        
             profile = Profile(
-                avatar=upload_img(form.avatar.data),
                 fname=form.fname.data,
                 lname=form.lname.data,
                 about=form.about.data,
-                user_id=current_user.id
+                user=current_user
             )
+            if form.avatar.data:
+                current_user.avatar = upload_img(form.avatar.data)
             db.session.add(profile)
             db.session.commit()
             flash('Profil has been updated!', category='success')
-            return redirect(url_for('setting'))
+            return redirect(url_for('profile', username=current_user.username))
         else:
             # updating profile information
             p = current_user.profile
@@ -94,10 +112,10 @@ def setting():
             p.lname=form.lname.data
             p.about=form.about.data
             if form.avatar.data:
-                p.avatar = upload_img(form.avatar.data)
+                current_user.avatar = upload_img(form.avatar.data)
             db.session.commit()
-            flash('Profil has been updated!', category='success')
-            return redirect(url_for('profile', username=current_user.username))
+            flash('Profile has been updated!', category='success')
+            return redirect(url_for('setting'))
     else:
         if current_user.profile:
             form.fname.data = current_user.profile.fname
@@ -106,11 +124,30 @@ def setting():
     return render_template('setting.html', form=form)
 
 
+@app.route("/delete/user/<id>", methods=["GET", "POST"])
+@login_required
+def delete_account(id):
+    user = User.query.filter_by(id=id).first()
+    user_avatar = 'app/static' + user.profile.avatar
+    if os.path.isfile(user_avatar):
+        os.remove(user_avatar)
+    for post in user.posts:
+        post_image = 'app/static' + post.image
+        if os.path.isfile(post_image):
+            os.remove(post_image)
+        db.session.delete(post)
+        db.session.commit()
+    db.session.delete(user)
+    db.session.commit()
+    return redirect(url_for('explore'))
+
+
 @app.route("/user/<username>", methods=["GET", "POST"])
 @login_required
 def profile(username):
+    form = EmptyForm()
     user = User.query.filter_by(username=username).first()
-    return render_template('profile.html', user=user)
+    return render_template('profile.html', user=user, form=form)
 
 
 @app.route("/add/post", methods=["GET", "POST"])
@@ -140,7 +177,8 @@ def add_post():
                 category_id=category.id,
                 tags=form.tags.data,
                 content=content,
-                user_id=current_user.id
+                create_date=datetime.datetime.now(),
+                author=current_user
             )
             db.session.add(post)
             db.session.commit()
@@ -167,12 +205,13 @@ def post_detail(title):
     form = CommentForm()
     post = Post.query.filter_by(title=title).first()
     tags = post.tags.split(',')
-    comments = Comment.query.all()
+    comments = Comment.query.filter_by(post=post).all()
     if form.validate_on_submit():
         comment = Comment(
             comment=form.comment.data,
-            username=form.username.data,
-            post_id=post.id
+            create_date=datetime.datetime.now(),
+            username=current_user,
+            post=post
         )
         db.session.add(comment)
         db.session.commit()
@@ -182,6 +221,63 @@ def post_detail(title):
         form.username.data = current_user.username
     return render_template(
         'post_detail.html', post=post, tags=tags, comments=comments, form=form
+    )
+
+
+@app.route('/follow/<username>', methods=['POST', 'GET'])
+@login_required
+def follow(username):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=username).first()
+        if user is None:
+            flash('User {} not found.'.format(username), category='danger')
+            return redirect(url_for('explore'))
+        if user == current_user:
+            return redirect(url_for('profile', username=username))
+        current_user.follow(user)
+        db.session.commit()
+        flash('You are following {}!'.format(username), category='success')
+        return redirect(url_for('profile', username=username))
+    else:
+        return redirect(url_for('explore'))
+
+
+@app.route('/unfollow/<username>', methods=['POST', 'GET'])
+@login_required
+def unfollow(username):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=username).first()
+        if user is None:
+            flash('User {} not found.'.format(username), category='danger')
+            return redirect(url_for('explore'))
+        if user == current_user:
+            return redirect(url_for('profile', username=username))
+        current_user.unfollow(user)
+        db.session.commit()
+        flash('You are not following {} anymore.'.format(username), category='danger')
+        return redirect(url_for('profile', username=username))
+    else:
+        return redirect(url_for('explore'))
+
+
+@app.route('/feed', methods=['POST', 'GET'])
+@login_required
+def feed():
+    page = request.args.get('page', 1, type=int)
+    posts = current_user.followed_posts().paginate(
+        page, app.config['POSTS_PER_PAGE'], False
+    )
+    next_url = url_for(
+        'feed', page=posts.next_num
+    ) if posts.has_next else None
+    prev_url = url_for(
+        'feed', page=posts.prev_num
+    ) if posts.has_prev else None
+    return render_template(
+        'feed.html', title='feed', posts=posts.items,
+         next_url=next_url, prev_url=prev_url
     )
 
 

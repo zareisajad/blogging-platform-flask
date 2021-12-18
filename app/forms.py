@@ -3,7 +3,7 @@ from flask_wtf.file import FileField, FileAllowed
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.fields.simple import TextAreaField
 from wtforms.validators import DataRequired, Email, ValidationError, Length, EqualTo
-from wtforms import StringField, PasswordField
+from wtforms import StringField, PasswordField, SubmitField
 
 from app.models import Category, User
 
@@ -95,3 +95,7 @@ class CommentForm(FlaskForm):
         render_kw={'placeholder': 'write comment','cols':'30', 'rows':'5'},
         validators=[DataRequired()]
     )
+
+
+class EmptyForm(FlaskForm):
+    submit = SubmitField('Submit',render_kw={'class': 'btn btn-primary'} )

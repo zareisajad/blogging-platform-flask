@@ -11,7 +11,7 @@
                 <div class="col-md-1">
                     <!-- author avatar -->
                     <a href="{{ url_for('profile', username=post.author.username) }}">
-                        <img class="author-post-avatar" src="{{ url_for('static', filename=post.author.profile.avatar)}}" alt="">
+                        <img class="author-post-avatar" src="{{ url_for('static', filename=post.author.avatar)}}" alt="">
                     </a>
                 </div>
                 <div class="col-md-11 mt-1">
@@ -21,7 +21,7 @@
                     <!-- author username -->
                     <a href="{{ url_for('profile', username=post.author.username) }}">{{ post.author.username }} <br></a>
                     <!-- published date -->
-                    <p class="text-muted">12 minutes ago</p>
+                    <p style="font-family: sans-serif;" class="text-muted">{{ post.create_date.strftime('%Y/%m/%d at %H:%M') }}</p>
                 </div>
             </div>
             <!-- post title -->
@@ -45,15 +45,28 @@
             <hr class="dropdown-divider">
             <!-- comments -->
             <div class="">
-                <h5 class="text-center" id="commentBtn" style="cursor: pointer;">View Comments</h5>
-                <div id="comments" style="display: none;">
+                <h5 class="text-center mb-3">Comments</h5>
+                <div>
                     {% for comment in comments %}
-                        <div class="mt-1 ps-4">
-                            <!-- author username -->
-                            <a href="{{ url_for('profile', username=comment.username) }}">{{ comment.username }} <br></a>
-                            <p class="text-muted">12 minutes ago</p>
-                            <p>{{ comment.comment }}</p>
+                    <div class="bg-white mt-2 ms-4 me-4 pt-4 p-2 rounded">
+                        <div class="row">
+                            <div class="col-md-1">
+                                <!-- author avatar -->
+                                <a href="{{ url_for('profile', username=comment.username.avatar) }}">
+                                    <img class="author-post-avatar mt-1" src="{{ url_for('static', filename=comment.username.avatar)}}" alt="">
+                                </a>
+                            </div>
+                            <div class="col-md-11 mt-1">
+                                <!-- author username -->
+                                <a href="{{ url_for('profile', username=comment.username.username) }}">
+                                    <span class="h5 text-primary">{{ comment.username.username }}</span>
+                                </a>
+                                <!-- published date -->
+                                <span style="font-family: sans-serif;" class="text-muted">{{ post.create_date.strftime('%y/%m/%d at %H:%M') }}:</span><br>
+                                <p class="mt-2">{{ comment.comment }}</p>
+                            </div> 
                         </div>
+                    </div>
                     {% endfor %}
                 </div>
             </div>

@@ -5,10 +5,10 @@ from flask_login import LoginManager
 from config import Config
 
 app = Flask(__name__)
+app.config.from_object(Config) 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 login = LoginManager(app)
-app.config.from_object(Config)
 login.login_view = 'signup'
 login.login_message = """if your'e new here please fill the form to sign up!
                         otherwise login to your account."""

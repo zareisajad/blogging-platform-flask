@@ -5,9 +5,9 @@
     <!-- sidebar -->
     <div class="row">
         <div class="col-md-4 rounded">
-            <li class="list-group-item text-white text-center text-capitalize"><b class="text-dark">Welcome to flask-blog</b></li>
+            <li class="list-group-item text-light text-center text-capitalize"><b class="text-dark">Welcome to flask-blog</b></li>
             <li class="list-group-item"><a href="#"></a>
-                <h4>Recent posts:</h4>
+                <h4>Top posts:</h4>
                 {% for post in posts %}
                 <img style="height: 80px; width: 80px;" class="mt-2 rounded" src="{{ url_for('static', filename=post.image)}}" alt="">
                 {{post.title}} <br>
@@ -23,7 +23,7 @@
         <!-- post card -->
         <div class="col-md-8">
             {% for post in posts %}
-            <div class="border bg-white rounded p-3 mb-3" style="overflow-wrap: break-word;">
+            <div class="border bg-light rounded p-3 mb-3" style="overflow-wrap: break-word;">
                 <div class="row">
                     <div class="col-md-1">
                         <!-- author avatar -->
@@ -69,3 +69,4 @@
     </div>
 </main> 
 {% endblock %}
+
