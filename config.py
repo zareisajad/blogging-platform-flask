@@ -27,4 +27,11 @@ class Config(object):
     ALLOWED_STYLES = bleach.sanitizer.ALLOWED_STYLES + [
         'color', 'background-color', 'width', 'height'
     ]
-    POSTS_PER_PAGE = 15
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USE_SSL = False
+    MAIL_USERNAME = 'username@example.com'
+    MAIL_PASSWORD = 'your-password'
+    ADMINS = ['username@example.com']
+    POSTS_PER_PAGE = 10

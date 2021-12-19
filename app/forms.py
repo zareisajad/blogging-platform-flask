@@ -99,3 +99,13 @@ class CommentForm(FlaskForm):
 
 class EmptyForm(FlaskForm):
     submit = SubmitField('Submit',render_kw={'class': 'btn btn-primary'} )
+
+
+class ResetPasswordRequestForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    password2 = PasswordField(
+        'Repeat Password', validators=[DataRequired(), EqualTo('password')])

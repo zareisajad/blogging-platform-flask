@@ -1,0 +1,42 @@
+<!-- post card -->
+<div class="col-md-8">
+{% for post in posts %}
+<div class="border bg-white rounded p-3 mb-3" style="overflow-wrap: break-word;">
+    <div class="row">
+        <div class="col-md-1">
+            <!-- author avatar -->
+            <a href="{{ url_for('profile', username=post.author.username) }}">
+                <img class="author-post-avatar" src="{{ url_for('static', filename=post.author.avatar)}}" alt="">
+            </a>
+        </div>
+        <div class="col-md-11 mt-1">
+            <!-- published date -->
+            <p style="float: right;font-family: sans-serif;" class="text-muted">{{ post.create_date.strftime('%Y/%m/%d') }}</p>
+            <!-- author username -->
+            <a href="{{ url_for('profile', username=post.author.username) }}">{{ post.author.username }} <br></a>
+            <p class="text-muted">{{ post.author.profile.fname }} {{ post.author.profile.lname }}</p>
+        </div> 
+    </div>
+    <!-- post title -->
+    <h2 class=" mb-3 mt-1">
+        <a class="text-primary" href="{{ url_for('post_detail', title=post.title) }}">
+            {{ post.title }}
+        </a>
+    </h2>
+    <!-- post image -->
+    <img class="post-card-img rounded" src="{{ url_for('static', filename=post.image)}}" alt="">
+    <!-- like btn -->
+    {% if current_user.is_authenticated %}
+      {% if current_user.has_liked(post) %}
+       <a href="{{ url_for('like_action', post_id=post.id, action='unlike') }}"><i style="float: right;color: #0074e0;" class="material-icons mt-4">&#xe87d;</i></a>
+      {% else %}
+       <a href="{{ url_for('like_action', post_id=post.id, action='like') }}"><i style="float: right;font-size: 30px;" class="material-icons mt-3 text-primary">&#xe87e;</i></a>
+      {% endif %}
+    {% else %}
+    {% endif %}
+    <!-- read more btn -->
+    <a class="btn btn-primary mt-3" href="{{ url_for('post_detail', title=post.title) }}">
+        Read More
+    </a> 
+</div>
+{% endfor %}

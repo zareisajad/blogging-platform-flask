@@ -37,10 +37,7 @@
               <a class="nav-link add-post" href="{{ url_for('add_post') }}">New Post</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link " href="{{ url_for('add_post') }}">Likes</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link " href="{{ url_for('add_post') }}">Saved</a>
+              <a class="nav-link " href="{{ url_for('liked') }}">Liked Posts</a>
             </li>
             <li class="nav-item">
               <a class="nav-link setting" href="{{ url_for('setting') }}">Setting</a>
@@ -115,6 +112,10 @@
               <input name="password"" type="password" class="form-control" id="inputPassword" placeholder="Password" required>
             </div>
             <button type="submit" class="btn btn-info w-100 mt-3 ">Submit</button>
+            <p class="mt-3">
+              Forgot Your Password?
+              <a href="{{ url_for('reset_password_request') }}">Click to Reset It</a>
+            </p>
         </form>
     </div>
   </div>

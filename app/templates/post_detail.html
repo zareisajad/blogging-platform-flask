@@ -30,9 +30,13 @@
             <img class="w-100 h-90 rounded" src="{{ url_for('static', filename=post.image)}}" alt="">
             <!-- post content -->
             <div class="pe-5 mt-5 mb-5" >{{ post.content|safe }}</div>
-            <!-- save btn -->
-            <a class="text-danger" href=""><i class="material-icons post-detail-icons">&#xe87e;</i> Like it</a>
             <!-- like btn -->
+            {% if current_user.has_liked(post) %}
+            <a class="text-danger" href="{{ url_for('like_action', post_id=post.id, action='unlike') }}"><i class="material-icons post-detail-icons">&#xe87d;</i> Unlike it</a>
+            {% else %}
+            <a class="text-danger" href="{{ url_for('like_action', post_id=post.id, action='like') }}"><i class="material-icons post-detail-icons">&#xe87e;</i> Like it</a>
+            {% endif %}
+            <!-- save btn -->
             <div style="float: right;">
                 <a class="text-primary" href="#">Save it <i class="material-icons post-detail-icons">&#xe867;</i></a>
             </div>

@@ -11,7 +11,8 @@ from collections import Counter
 
 from app import app, login, db
 from app.models import User, Category, Post, Profile, Comment
-from app.forms import AddPostForm, ProfileForm, SignupForm, CommentForm, EmptyForm
+from app.forms import AddPostForm, ProfileForm, SignupForm, CommentForm, EmptyForm, ResetPasswordRequestForm, ResetPasswordForm 
+from app.email import send_password_reset_email
 
 
 @login.user_loader
@@ -75,6 +76,13 @@ def feed():
     )
 
 
+@app.route('/liked', methods=['POST', 'GET'])
+@login_required
+def liked():
+    posts = current_user.liked_posts()
+    return render_template('liked.html', posts=posts)
+
+
 @app.route("/login-request", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -85,6 +93,11 @@ def login():
             abort(404)
         login_user(user)
     return redirect(url_for("setting"))
+
+
+@app.route("/signin", methods=["GET", "POST"])
+def signin():
+    return render_template("sign_in.html", title="Sign In")
 
 
 @app.route("/signup", methods=["GET", "POST"])
@@ -104,6 +117,44 @@ def signup():
 def logout():
     logout_user()
     return redirect(url_for("explore"))
+
+
+@app.route('/reset_password_request', methods=['GET', 'POST'])
+def reset_password_request():
+    form = ResetPasswordRequestForm()
+    if current_user.is_authenticated:
+        return redirect(url_for('explore'))
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            send_password_reset_email(user)    
+            flash(
+                'Check your email for the instructions to reset your password',
+                 category='info'
+            )
+            return redirect(url_for('reset_password_request'))
+        else:
+            flash('there is no user with this email.', category='danger')
+            return redirect(url_for('reset_password_request'))
+    return render_template(
+        'reset_password_request.html', title='Reset Password', form=form
+    )
+
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('explore'))
+    user = User.verify_reset_password_token(token)
+    if not user:
+        return redirect(url_for('explore'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user.set_password(form.password.data)
+        db.session.commit()
+        flash('Your password has been reset.', category='success')
+        return redirect(url_for('signin'))
+    return render_template('reset_password.html', form=form)
 
 
 def upload_img(img_file):
@@ -172,8 +223,6 @@ def delete_account(id):
         post_image = 'app/static' + post.image
         if os.path.isfile(post_image):
             os.remove(post_image)
-        db.session.delete(post)
-        db.session.commit()
     db.session.delete(user)
     db.session.commit()
     return redirect(url_for('explore'))
@@ -297,6 +346,19 @@ def unfollow(username):
         return redirect(url_for('profile', username=username))
     else:
         return redirect(url_for('explore'))
+
+
+@app.route('/post/<action>/<int:post_id>')
+@login_required
+def like_action(action, post_id):
+    post = Post.query.filter_by(id=post_id).first_or_404()
+    if action == 'like':
+        current_user.like(post)
+        db.session.commit()
+    if action == 'unlike':
+        current_user.unlike(post)
+        db.session.commit()
+    return redirect(url_for('explore'))
 
 
 @app.route("/add/category", methods=["GET", "POST"])

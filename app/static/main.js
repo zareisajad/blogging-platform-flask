@@ -35,10 +35,6 @@ function clickOutside(e) {
   }
 }
 
-// load login modal when a route is login requierd
-if (window.location.href.includes("signup?next=")) {
-  openModal();
-}
 
 // Sending Login form data to back-end
 const loginForm = document.querySelector("#loginForm");
