@@ -5,20 +5,44 @@
     <!-- sidebar -->
     <div class="row">
         <div class="col-md-4 rounded">
-            <li class="list-group-item text-light text-center text-capitalize"><b class="text-dark">Welcome to flask-blog</b></li>
-            <li class="list-group-item"><a href="#"></a>
-                <h4>Top posts:</h4>
-                {% for post in posts %}
-                <img style="height: 80px; width: 80px;" class="mt-2 rounded" src="{{ url_for('static', filename=post.image)}}" alt="">
-                {{post.title}} <br>
-                {% endfor %}
-            </li>
+            <li class="list-group-item text-white text-center text-capitalize"><b class="text-dark">Welcome to flask-blog</b></li>
+            <!-- Popular Users -->
+            {% if top_users %}
             <li class="list-group-item "><a href="#"></a>
-                <h4>Recent Comments:</h4>
-                {% for comment in comments %}
-                    {{ comment.comment }}
+                <h4 class="mt-2 mb-3">Top Users:</h4>
+                {% for user in top_users %}
+                <a href="{{ url_for('profile', username=user.username) }}}">
+                    <img class="author-post-avatar" src="{{ url_for('static', filename=user.avatar)}}" alt="">
+                    {{ user.username }}
+                </a>
                 {% endfor %}
             </li>
+            {% else %}
+            {% endif %}
+            <!-- posts in sidebar -->
+            {% if posts %}
+                <li class="list-group-item pb-3"><a href="#"></a>
+                    <h4 class="mt-2 mb-3">Recent posts:</h4>
+                    {% for post in posts %}
+                    <a href="{{ url_for('post_detail', title=post.title) }}">
+                        <img class="mt-2 rounded sidbar-posts" src="{{ url_for('static', filename=post.image)}}" alt="">
+                        {{post.title}}<br>
+                    </a>
+                    {% endfor %}
+                </li>
+            {% else %}
+            {% endif %}
+            <!-- comments in sidbar -->
+            {% if comments %}
+            <li class="list-group-item "><a href="#"></a>
+                <h4 class="mt-2 mb-3">Recent Comments:</h4>
+                {% for comment in comments %}
+                <img class="author-post-avatar" src="{{ url_for('static', filename=comment.username.avatar)}}" alt="">
+                {{ comment.comment }} <br>
+                {% endfor %}
+            </li>
+            {% else %}
+            {% endif %}
         </div>
         <!-- post card -->
         <div class="col-md-8">
@@ -41,7 +65,7 @@
                     </div> 
                 </div>
                 <!-- post title -->
-                <h2 class="mt-3 mb-4">
+                <h2 class="mt-2 mb-3">
                     <a class="text-primary" href="{{ url_for('post_detail', title=post.title) }}">
                         {{ post.title }}
                     </a>

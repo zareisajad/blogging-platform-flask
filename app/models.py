@@ -12,16 +12,23 @@ followers = db.Table(
     db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
 )
 
-
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    avatar = db.Column(db.String(200), nullable=False, default='images/default.png')
+    avatar = db.Column(
+        db.String(200), nullable=False, default='images/default.png'
+    )
     username = db.Column(db.String(120))
     email = db.Column(db.String(120), index=True, unique=True)
     password = db.Column(db.String(128))
-    posts = db.relationship('Post', backref='author', lazy='dynamic')
-    profile = db.relationship('Profile', backref='user', uselist=False)
-    comments = db.relationship('Comment', backref='username')
+    posts = db.relationship(
+        'Post', backref='author', cascade="all,delete", lazy='dynamic'
+    )
+    profile = db.relationship(
+        'Profile', backref='user', cascade="all,delete", uselist=False
+    )
+    comments = db.relationship(
+        'Comment', cascade="all,delete", backref='username'
+    )
     followed = db.relationship(
         'User', secondary=followers,
         primaryjoin=(followers.c.follower_id == id),
@@ -29,7 +36,7 @@ class User(db.Model, UserMixin):
         backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
 
     def __repr__(self):
-        return '<User {}>'.format(self.email)
+        return '<User {}>'.format(self.username)
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -49,6 +56,8 @@ class User(db.Model, UserMixin):
         return self.followed.filter(
             followers.c.followed_id == user.id).count() > 0
 
+ 
+
     def followed_posts(self):
         followed = Post.query.join(
             followers, (followers.c.followed_id == Post.user_id)).filter(
@@ -63,6 +72,9 @@ class Profile(db.Model):
     lname = db.Column(db.String(120))
     about = db.Column(db.String(250))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    
+    def __repr__(self):
+        return '<{} {}>'.format(self.fname, self.lname)
 
 
 class Comment(db.Model):
@@ -71,7 +83,7 @@ class Comment(db.Model):
     create_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
+    
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -81,9 +93,12 @@ class Post(db.Model):
     content = db.Column(db.String(800))
     view = db.Column(db.Integer, default=0)
     create_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    comment = db.relationship('Comment', backref='post')
+    comment = db.relationship('Comment', cascade="all,delete", backref='post')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    
+    def __repr__(self):
+        return '<{}>'.format(self.title)
 
 
 class Category(db.Model):

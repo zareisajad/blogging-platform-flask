@@ -31,10 +31,10 @@
               <a class="nav-link home" aria-current="page" href="{{url_for('explore')}}">Explore</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link " href="{{ url_for('feed') }}">Feed</a>
+              <a class="nav-link feed" href="{{ url_for('feed') }}">Feed</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link " href="{{ url_for('add_post') }}">New Post</a>
+              <a class="nav-link add-post" href="{{ url_for('add_post') }}">New Post</a>
             </li>
             <li class="nav-item">
               <a class="nav-link " href="{{ url_for('add_post') }}">Likes</a>
@@ -43,7 +43,7 @@
               <a class="nav-link " href="{{ url_for('add_post') }}">Saved</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link " href="{{ url_for('setting') }}">Setting</a>
+              <a class="nav-link setting" href="{{ url_for('setting') }}">Setting</a>
             </li>
           </ul>
           <div class="pe-4">
@@ -64,9 +64,9 @@
               </li>
             </ul>
           </div>
-          <form class="d-flex">
-            <input class="form-control search-form" type="search" placeholder="title,author..." aria-label="Search">
-            <button class="btn btn-outline-info ms-1 " type="submit">Search</button>
+          <form action="{{ url_for('search_form') }}" method="post" class="d-flex">
+            <input name="q" class="form-control search-form" type="search" placeholder="title, tags etc.." aria-label="Search">
+            <button class="btn btn-info ms-1" type="submit">Search</button>
           </form>
         </div>
       </div>

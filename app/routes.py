@@ -6,7 +6,8 @@ from flask import render_template, flash, redirect, url_for, request, abort
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.utils import secure_filename
 from werkzeug.urls import url_parse
-from sqlalchemy import desc
+from sqlalchemy import desc, or_
+from collections import Counter
 
 from app import app, login, db
 from app.models import User, Category, Post, Profile, Comment
@@ -21,7 +22,16 @@ def load_user(id):
 @app.route("/", methods=["GET", "POST"])
 @app.route("/explore", methods=["GET", "POST"])
 def explore():
-    comments = Comment.query.all()
+    comments = Comment.query.order_by(desc(Comment.create_date)).all()
+    top_users = []
+    p = Post.query.all()
+    authors = (i.author for i in p)
+    # get author's posts count
+    top_authors = dict(Counter(authors))
+    # add authors with 3 post or more in top_users
+    for x, y in top_authors.items():
+        if y >= 3:
+            top_users.append(x)
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(desc(Post.create_date)).paginate(
         page, app.config['POSTS_PER_PAGE'], False
@@ -33,8 +43,35 @@ def explore():
         'explore', page=posts.prev_num
     ) if posts.has_prev else None
     return render_template(
-        'explore.html', title='explore', posts=posts.items,
-        next_url=next_url, prev_url=prev_url, comments=comments
+        'explore.html', title='explore', posts=posts.items, top_users=top_users,
+        next_url=next_url, prev_url=prev_url, comments=comments,
+    )
+
+
+@app.route('/feed', methods=['POST', 'GET'])
+@login_required
+def feed():
+    comments = Comment.query.order_by(desc(Comment.create_date)).all()
+    top_users = []
+    p = Post.query.all()
+    authors = (i.author for i in p)
+    top_authors = dict(Counter(authors))
+    for x, y in top_authors.items():
+        if y >= 3:
+            top_users.append(x)
+    page = request.args.get('page', 1, type=int)
+    posts = current_user.followed_posts().paginate(
+        page, app.config['POSTS_PER_PAGE'], False
+    )
+    next_url = url_for(
+        'feed', page=posts.next_num
+    ) if posts.has_next else None
+    prev_url = url_for(
+        'feed', page=posts.prev_num
+    ) if posts.has_prev else None
+    return render_template(
+        'feed.html', title='feed', posts=posts.items, top_users=top_users,
+         next_url=next_url, prev_url=prev_url, comments=comments
     )
 
 
@@ -128,7 +165,7 @@ def setting():
 @login_required
 def delete_account(id):
     user = User.query.filter_by(id=id).first()
-    user_avatar = 'app/static' + user.profile.avatar
+    user_avatar = 'app/static' + user.avatar
     if os.path.isfile(user_avatar):
         os.remove(user_avatar)
     for post in user.posts:
@@ -262,25 +299,6 @@ def unfollow(username):
         return redirect(url_for('explore'))
 
 
-@app.route('/feed', methods=['POST', 'GET'])
-@login_required
-def feed():
-    page = request.args.get('page', 1, type=int)
-    posts = current_user.followed_posts().paginate(
-        page, app.config['POSTS_PER_PAGE'], False
-    )
-    next_url = url_for(
-        'feed', page=posts.next_num
-    ) if posts.has_next else None
-    prev_url = url_for(
-        'feed', page=posts.prev_num
-    ) if posts.has_prev else None
-    return render_template(
-        'feed.html', title='feed', posts=posts.items,
-         next_url=next_url, prev_url=prev_url
-    )
-
-
 @app.route("/add/category", methods=["GET", "POST"])
 @login_required
 def add_category():
@@ -298,6 +316,7 @@ def add_category():
 @app.context_processor
 def pass_category():
     category = Category.query.filter().all()
+    posts = Post.query.all()
     return dict(category=category)
 
 
@@ -313,4 +332,12 @@ def filter_by_category(category):
 @login_required
 def filter_by_tags(tag):
     posts = Post.query.filter(Post.tags.contains(tag)).all()
+    return render_template('explore.html', posts=posts)
+
+
+@app.route("/search", methods=["GET", "POST"])
+@login_required
+def search_form():
+    query = request.form.get('q')
+    posts = Post.query.filter(or_(Post.title.contains(query), Post.tags.contains(query))).all()
     return render_template('explore.html', posts=posts)

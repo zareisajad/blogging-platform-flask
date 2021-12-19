@@ -1,8 +1,14 @@
 // active nav buttons
 if (window.location.href.includes("signup")) {
   document.querySelector("#signupBtn").classList.add("active");
-} else if (window.location.href.includes("")) {
+} else if (window.location.href.includes("explore")) {
   document.querySelector(".home").classList.add("active");
+} else if (window.location.href.includes("feed")) {
+  document.querySelector(".feed").classList.add("active");
+} else if (window.location.href.includes("/add/post")) {
+  document.querySelector(".add-post").classList.add("active");
+} else if (window.location.href.includes("setting")) {
+  document.querySelector(".setting").classList.add("active");
 }
 
 // Login Modal

@@ -1,6 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Raleway:200,100,400");
 
-
 body {
   background: #ccc;
   font-family: "Raleway", sans-serif;
@@ -124,4 +123,27 @@ main a:hover {
 
 .post-detail-icons{
   vertical-align: middle;
+}
+.sidbar-posts{
+  height: 80px;
+  width: 80px;
+  object-fit: cover; 
+}
+.hero{
+  object-fit: cover; 
+  height: 100%;
+  width: 100%;
+}
+
+.container-img{
+  position: relative;
+  opacity: 0.85;
+  height: 100%;
+}
+
+.title {
+  position: absolute;
+  bottom: 8px;
+  left: 16px;
+  color: rgb(255, 255, 255);
 }
