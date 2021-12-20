@@ -99,7 +99,7 @@ main a:hover {
 }
 .post-card-content {
   display: block;
-  width: 90%;
+  width: 100%;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

@@ -87,9 +87,11 @@
                     <h4 class="mt-2 mb-3">Recent posts:</h4>
                     {% for post in posts %}
                     <a href="{{ url_for('post_detail', title=post.title) }}">
-                        <img class="mt-2 rounded sidbar-posts" src="{{ url_for('static', filename=post.image)}}" alt="">
-                        {{post.title}}<br>
-                    </a>
+                        <span class="post-card-content">
+                            <img class="mt-2 rounded sidbar-posts" src="{{ url_for('static', filename=post.image)}}" alt="">
+                            {{post.title}}
+                        </span>
+                        </a>
                     {% endfor %}
                 </li>
             {% else %}
@@ -99,7 +101,7 @@
             <li class="list-group-item "><a href="#"></a>
                 <h4 class="mt-2 mb-3">Recent Comments:</h4>
                 {% for comment in comments %}
-                <img class="author-post-avatar" src="{{ url_for('static', filename=comment.username.avatar)}}" alt="">
+                <img class="author-post-avatar mt-2" src="{{ url_for('static', filename=comment.username.avatar)}}" alt="">
                 {{ comment.comment }} <br>
                 {% endfor %}
             </li>

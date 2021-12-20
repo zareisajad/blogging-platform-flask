@@ -34,4 +34,4 @@ class Config(object):
     MAIL_USERNAME = 'username@example.com'
     MAIL_PASSWORD = 'your-password'
     ADMINS = ['username@example.com']
-    POSTS_PER_PAGE = 10
+    POSTS_PER_PAGE = 7
