@@ -1,4 +1,4 @@
-# Bloggin Platform
+# Flask Blogging Platform
 ![Screenshot 2021-12-20 at 10-33-14 explore](https://user-images.githubusercontent.com/71011395/146785396-41bae187-b7c2-4659-8b32-e6aa164b0a5d.png)
 
 Flask-Blogging Platform is Where you can publish content in the form of blog posts and get feedback from your people and friends.
