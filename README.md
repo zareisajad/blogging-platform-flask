@@ -5,8 +5,6 @@ Flask-Blogging Platform is Where you can publish content in the form of blog pos
 You can follow your favorite authors and see their posts in your personal feed. Also, the latest published content can be seen in the Explorer section.
 of course there is more cool features.
 
-- Click [Here](#app-preview) for app preview.
-
 ## Used In This App:
 - python3.8
 - flask framework
@@ -22,5 +20,3 @@ of course there is more cool features.
 6. next run this command: ```flask db upgrade```
 7. now you can run the sever using: ```flask run```
 8. finally enter this url in your browser: http://127.0.0.1:5000
-
-## App Preview
