@@ -11,7 +11,10 @@ from collections import Counter
 
 from app import app, login, db
 from app.models import User, Category, Post, Profile, Comment
-from app.forms import AddPostForm, ProfileForm, SignupForm, CommentForm, EmptyForm, ResetPasswordRequestForm, ResetPasswordForm 
+from app.forms import (
+    AddPostForm, ProfileForm, SignupForm, CommentForm, EmptyForm,
+    ResetPasswordRequestForm, ResetPasswordForm
+)
 from app.email import send_password_reset_email
 
 
