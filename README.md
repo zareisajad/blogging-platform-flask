@@ -12,7 +12,6 @@ of course there is more cool features.
 - personal feed
 - explore
 - search users
-- 
 
 
 ## Used In This App:
@@ -20,7 +19,8 @@ of course there is more cool features.
 - flask framework
 - Bootstrap5
 - SQLite database
-- [summernote](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjf6MSTsKT1AhUQ-6QKHS3_AU8QFnoECBkQAQ&url=https%3A%2F%2Fsummernote.org%2F&usg=AOvVaw0bOj5o1D9z1cfWlhrAXezd) the html editor.
+- [summernote](https://summernote.org/) the html editor.
+
 
 ## How To Run it:
 1. install ```python3```, ```pip3```, ```python3-venv``` in your machine.
