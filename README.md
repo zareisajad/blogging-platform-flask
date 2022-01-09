@@ -5,11 +5,22 @@ Flask-Blogging Platform is Where you can publish content in the form of blog pos
 You can follow your favorite authors and see their posts in your personal feed. Also, the latest published content can be seen in the Explorer section.
 of course there is more cool features.
 
+- password reset using email
+- create post with html editor(summernote)
+- like/unlike ajax
+- follow/unfollow
+- personal feed
+- explore
+- search users
+- 
+
+
 ## Used In This App:
 - python3.8
 - flask framework
 - Bootstrap5
 - SQLite database
+- [summernote](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjf6MSTsKT1AhUQ-6QKHS3_AU8QFnoECBkQAQ&url=https%3A%2F%2Fsummernote.org%2F&usg=AOvVaw0bOj5o1D9z1cfWlhrAXezd) the html editor.
 
 ## How To Run it:
 1. install ```python3```, ```pip3```, ```python3-venv``` in your machine.
