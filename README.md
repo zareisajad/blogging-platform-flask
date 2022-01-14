@@ -12,6 +12,8 @@ of course there is more cool features.
 - personal feed
 - explore
 - search users
+- edit/delete post
+- delete account
 
 
 ## Used In This App:
@@ -19,7 +21,7 @@ of course there is more cool features.
 - flask framework
 - Bootstrap5
 - SQLite database
-- [summernote](https://summernote.org/) the html editor.
+- [summernote](https://summernote.org/)
 
 
 ## How To Run it:
